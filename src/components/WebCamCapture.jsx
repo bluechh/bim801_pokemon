@@ -33,10 +33,13 @@ export default class WebCamCaptureContainer extends React.Component {
                 <Webcam
                   ref="webcam"
                   audio={false}
+                  mirrored="true"
+                  forceScreenshotSourceSize="true"
                   // height={350}
                   screenshotFormat="image/jpeg"
                   // width={350}
                   videoConstraints={this.state.videoConstants}
+                  width="100%" height="100%"
                 />
               </Grid>
                 <Grid item xs={12}>

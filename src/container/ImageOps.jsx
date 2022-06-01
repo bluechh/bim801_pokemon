@@ -57,7 +57,7 @@ export default class ImageAppContainer extends React.Component {
 		let default_url = json['Default']
 		let ready = true
         this.setState({name : name})
-        this.setState({dis_url : display_url})
+        this.setState({dis_url : default_url})
 	}
 
     handleUploadImageChange(files) {
@@ -123,7 +123,7 @@ export default class ImageAppContainer extends React.Component {
                             </Card>
                             { this.state.image_file && !this.state.loading && <Card align = "center">
                                 <CardHeader title={"업로드한 이미지"} align = "center" style ={tempStyle}> </CardHeader>
-                                <img src={this.state.image_file} alt="" width="224" height="224" align = "center"/> 
+                                <img src={this.state.image_file} alt="" width="100%" height="100%" align = "center" /> 
                                 <Stack
                                     sx={{ mt: 1, mb: 1 }}
                                     direction="row"
@@ -157,13 +157,11 @@ export default class ImageAppContainer extends React.Component {
                                         </Button>    
                                     </Stack>                                                 
                                 </CardContent>
-                                <CardContent>
-                                    {this.state.loading && <WebCamCapture align = "center" saveCapturedImage={(data) => this.saveCapturedImage(data)}/>}
-                                </CardContent>
+                                {this.state.loading && <WebCamCapture saveCapturedImage={(data) => this.saveCapturedImage(data)}/>}
                                 {this.state.loading && this.state.image_data && <CardContent>
                                     <CardHeader title={`Captured Image`} align="center" >
                                     </CardHeader>
-                                    <img src={this.state.image_data} alt="" align = "center"/>
+                                    <img src={this.state.image_data} alt="" align = "center" width="100%" height="100%"/>
                                     <Box>
                                         <UploadImage image_data={this.state.image_data} />
                                     </Box>
