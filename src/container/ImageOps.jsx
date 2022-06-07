@@ -68,19 +68,19 @@ export default class ImageAppContainer extends React.Component {
     // });
     let json = await res.json();
     let poke_name = json["Name"];
+    let backup_img = json["Default"];
     let img_res = await fetch("https://bim801-server.herokuapp.com/", {
       method: "POST",
       body: JSON.stringify({ poke_name }),
     });
     let img_json = await img_res.json();
     let name = img_json["Name"];
-    let display_url = img_json["Display"];
-    best_display = display_url ? true : false;
-    let default_url = img_json["Default"];
+    if (name === "") best_display = json["Default"];
+    else best_display = img_json["Default"];
 
     let ready = true;
-    this.setState({ name: name });
-    this.setState({ dis_url: default_url });
+    this.setState({ name: poke_name });
+    this.setState({ dis_url: best_display });
   }
 
   handleUploadImageChange(files) {
