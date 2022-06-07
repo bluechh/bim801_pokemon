@@ -8266,6 +8266,11 @@ select-hose@^2.0.0:
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
+select-random-file@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/select-random-file/-/select-random-file-1.2.1.tgz#0f2eeae1df1c59971c51c26cfef5a71b31ae6cb5"
+  integrity sha512-W2IqEkRkMACy2ZBkiaXlN4GO/Vv4WhwR14+cwwXv24UjdJJcoNhd+NKNN1cIWzAL5XTzUCVP0GdvcvbYSFPk7g==
+
 selfsigned@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-2.0.1.tgz#8b2df7fa56bf014d19b6007655fff209c0ef0a56"
