@@ -8,6 +8,8 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
 
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -44,6 +46,8 @@ export default class ImageAppContainer extends React.Component {
       image_file: null,
       dis_url: null,
       name: null,
+      toggle_state: "upload",
+      selected: true,
     };
   }
 
@@ -112,6 +116,37 @@ export default class ImageAppContainer extends React.Component {
     this.get_classification();
   }
 
+  handleToggleChange = (e, value) => {
+    if (value === "camera") {
+      this.setState({
+        toggle_state: value,
+      });
+      this.setState({
+        selected: false,
+      });
+      this.setState({ image_file: null });
+      this.setState({ name: null });
+      this.setState({ dis_url: null });
+    } else {
+      this.setState({
+        toggle_state: value,
+      });
+      this.setState({
+        selected: true,
+      });
+      this.setState({ image_data: null });
+      this.setState({ loading: false });
+      this.setState({ name: null });
+      this.setState({ dis_url: null });
+    }
+  };
+
+  setSelected(data) {
+    this.setState({
+      selected: false,
+    });
+  }
+
   render() {
     const tempStyle = {
       boder: "'1px dashed black'",
@@ -129,113 +164,139 @@ export default class ImageAppContainer extends React.Component {
         <Container maxWidth="lg">
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <img src="/pocketmon_logo.svg" alt="" />
+              <img
+                src="/pocketmon_logo.svg"
+                alt=""
+                width="100%"
+                height="100%"
+              />
             </Grid>
-            <Grid item xs={5}>
-              <Card>
-                <Basic
-                  onImageChange={(data) => this.handleUploadImageChange(data)}
-                />
-              </Card>
-              {this.state.image_file && !this.state.loading && (
-                <Card align="center">
-                  <CardHeader
-                    title={"업로드한 이미지"}
-                    align="center"
-                    style={tempStyle}
-                  >
-                    {" "}
-                  </CardHeader>
-                  <img
-                    src={this.state.image_file}
-                    alt=""
-                    width="100%"
-                    height="100%"
-                    align="center"
+            <Grid item xs={12}>
+              <ToggleButtonGroup
+                onChange={(e, value) => this.handleToggleChange("date", value)}
+                name="date"
+                id="date-select"
+                exclusive={true}
+                size="large"
+                fullWidth={true}
+              >
+                <ToggleButton value="upload" selected={this.state.selected}>
+                  사진 업로드
+                </ToggleButton>
+                <ToggleButton value="camera" selected={!this.state.selected}>
+                  카메라 촬영
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+            {this.state.toggle_state === "upload" && (
+              <Grid item xs={12}>
+                <Card>
+                  <Basic
+                    onImageChange={(data) => this.handleUploadImageChange(data)}
                   />
-                  <Stack
-                    sx={{ mt: 1, mb: 1 }}
-                    direction="row"
-                    spacing={2}
-                    justifyContent="center"
-                  >
-                    <Button
-                      variant="contained"
-                      align="left"
-                      color="primary"
-                      onClick={() => this.saveImage()}
+                </Card>
+                {this.state.image_file && !this.state.loading && (
+                  <Card align="center">
+                    <CardHeader
+                      title={"업로드한 이미지"}
+                      align="center"
+                      style={tempStyle}
                     >
-                      닮은 포켓몬 찾기!
-                    </Button>
-                  </Stack>
-                  {this.state.name && (
-                    <Card align="center">
-                      <CardHeader
-                        title={"당신을 닮은 포켓몬은? " + this.state.name}
-                        align="center"
-                        style={tempStyle}
+                      {" "}
+                    </CardHeader>
+                    <img
+                      src={this.state.image_file}
+                      alt=""
+                      width="224"
+                      height="224"
+                      align="center"
+                    />
+                    <Stack
+                      sx={{ mt: 1, mb: 1 }}
+                      direction="row"
+                      spacing={2}
+                      justifyContent="center"
+                    >
+                      <Button
+                        variant="contained"
+                        align="left"
+                        color="primary"
+                        onClick={() => this.saveImage()}
                       >
-                        {" "}
-                      </CardHeader>
-                      <img
-                        src={this.state.dis_url}
-                        alt=""
-                        width="224"
-                        height="224"
+                        닮은 포켓몬 찾기!
+                      </Button>
+                    </Stack>
+                    {this.state.name && (
+                      <Card align="center">
+                        <CardHeader
+                          title={"당신을 닮은 포켓몬은? " + this.state.name}
+                          align="center"
+                          style={tempStyle}
+                        >
+                          {" "}
+                        </CardHeader>
+                        <img
+                          src={this.state.dis_url}
+                          alt=""
+                          width="224"
+                          height="224"
+                          align="center"
+                        />
+                      </Card>
+                    )}
+                  </Card>
+                )}
+              </Grid>
+            )}
+            {this.state.toggle_state === "camera" && (
+              <Grid item xs={12}>
+                <Card>
+                  <CardContent align="center">
+                    <Typography variant="h6" color="textPrimary" component="h6">
+                      CAMERA PREVIEW
+                    </Typography>
+                    <Stack
+                      sx={{ mt: 1, mb: 1 }}
+                      direction="row"
+                      spacing={2}
+                      justifyContent="center"
+                    >
+                      <Button
+                        variant="contained"
                         align="center"
+                        color="primary"
+                        onClick={() => this.turnCamera()}
+                      >
+                        Camera On/Off
+                      </Button>
+                    </Stack>
+                  </CardContent>
+                  {this.state.loading && (
+                    <WebCamCapture
+                      saveCapturedImage={(data) => this.saveCapturedImage(data)}
+                    />
+                  )}
+                  {this.state.loading && this.state.image_data && (
+                    <CardContent>
+                      <CardHeader
+                        title={`Captured Image`}
+                        align="center"
+                      ></CardHeader>
+                      <img
+                        src={this.state.image_data}
+                        alt=""
+                        align="center"
+                        width="100%"
+                        height="100%"
                       />
-                    </Card>
+                      <Box>
+                        <UploadImage image_data={this.state.image_data} />
+                      </Box>
+                    </CardContent>
                   )}
                 </Card>
-              )}
-            </Grid>
-            <Grid item xs={6}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" color="textPrimary" component="h6">
-                    CAMERA PREVIEW
-                  </Typography>
-                  <Stack
-                    sx={{ mt: 1, mb: 1 }}
-                    direction="row"
-                    spacing={2}
-                    justifyContent="center"
-                  >
-                    <Button
-                      variant="contained"
-                      align="center"
-                      color="primary"
-                      onClick={() => this.turnCamera()}
-                    >
-                      Camera On/Off
-                    </Button>
-                  </Stack>
-                </CardContent>
-                {this.state.loading && (
-                  <WebCamCapture
-                    saveCapturedImage={(data) => this.saveCapturedImage(data)}
-                  />
-                )}
-                {this.state.loading && this.state.image_data && (
-                  <CardContent>
-                    <CardHeader
-                      title={`Captured Image`}
-                      align="center"
-                    ></CardHeader>
-                    <img
-                      src={this.state.image_data}
-                      alt=""
-                      align="center"
-                      width="100%"
-                      height="100%"
-                    />
-                    <Box>
-                      <UploadImage image_data={this.state.image_data} />
-                    </Box>
-                  </CardContent>
-                )}
-              </Card>
-            </Grid>
+              </Grid>
+            )}
           </Grid>
         </Container>
       </ThemeProvider>
