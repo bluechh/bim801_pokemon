@@ -927,13 +927,10 @@ export default class UploadImage extends React.Component {
     let poke_image = this.props.image_data;
     await new Promise((r) => setTimeout(r, 15));
     let best_display = false;
-    let res = await fetch(
-      "https://main-pokemon-classifier-imjeffhi4.endpoint.ainize.ai/classify/",
-      {
-        method: "POST",
-        body: JSON.stringify({ poke_image }),
-      }
-    );
+    let res = await fetch("https://bim801-server.herokuapp.com/", {
+      method: "POST",
+      body: JSON.stringify({ poke_image }),
+    });
     let json = await res.json();
     let poke_name = json["Name"];
     let korean_name = poke_name_convertor[poke_name];
