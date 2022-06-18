@@ -955,13 +955,10 @@ export default class ImageAppContainer extends React.Component {
     let poke_image = this.state.image_file;
     await new Promise((r) => setTimeout(r, 20));
     let best_display = false;
-    let res = await fetch(
-      "https://main-pokemon-classifier-imjeffhi4.endpoint.ainize.ai/classify/",
-      {
-        method: "POST",
-        body: JSON.stringify({ poke_image }),
-      }
-    );
+    let res = await fetch("http://eec2-34-143-237-29.ngrok.io/", {
+      method: "POST",
+      body: JSON.stringify({ poke_image }),
+    });
     // let res = await fetch("http://eec2-34-143-237-29.ngrok.io/", {
     //   method: "POST",
     //   body: JSON.stringify({ poke_image }),
